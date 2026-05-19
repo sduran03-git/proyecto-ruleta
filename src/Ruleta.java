@@ -1,58 +1,60 @@
 import java.util.Random;
 import java.util.Scanner;
+
 public class Ruleta {
+
     public static final int MAX_HISTORIAL = 100;
-    public static int[] historialNumeros = new int[MAX_HISTORIAL];
+    public static int[] historialNumeros  = new int[MAX_HISTORIAL];
     public static int[] historialApuestas = new int[MAX_HISTORIAL];
     public static boolean[] historialAciertos = new boolean[MAX_HISTORIAL];
     public static int historialSize = 0;
     public static Random rng = new Random();
-    public static int[] numerosRojos =
-            {1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36};
-/**
- * Método principal: inicia el programa llamando al menú.
- */
+    public static final int[] NUMEROS_ROJOS =
+            {1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36};
 
     public static void main(String[] args) {
         menu();
     }
 
-    /**
-     * Controla el flujo principal del programa mostrando un menú en consola.
-     */
     public static void menu() {
+        Scanner in = new Scanner(System.in);
+        int opcion;
+        do {
+            mostrarMenu();
+            opcion = leerOpcion(in);
+            ejecutarOpcion(opcion, in);
+        } while (opcion != 3);
+        in.close();
     }
 
-    /**
-     * Muestra en consola las opciones disponibles del menú.
-     */
     public static void mostrarMenu() {
+        System.out.println("\n===== CASINO BLACK CAT - RULETA =====");
+        System.out.println("1. Iniciar ronda");
+        System.out.println("2. Ver estadísticas");
+        System.out.println("3. Salir");
+        System.out.print("Elige una opción: ");
     }
 
-    /**
-     * Lee la opción elegida por el usuario desde teclado.
-     *
-     * @param in Scanner para entrada por consola.
-     * @return número de opción ingresado.
-     */
     public static int leerOpcion(Scanner in) {
-        return 0;
+        try {
+            return Integer.parseInt(in.nextLine().trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 
-    /**
-     * Ejecuta la acción correspondiente a la opción del menú.
-     *
-     * @param opcion opción elegida por el usuario.
-     * @param in     Scanner para entrada por consola.
-     */
     public static void ejecutarOpcion(int opcion, Scanner in) {
+        if (opcion == 1) {
+            iniciarRonda(in);
+        } else if (opcion == 2) {
+            mostrarEstadisticas();
+        } else if (opcion == 3) {
+            System.out.println("¡Hasta pronto!");
+        } else {
+            System.out.println("Opción inválida. Intenta de nuevo.");
+        }
     }
 
-    /**
-     * Inicia una ronda de la ruleta: leer apuesta, girar, evaluar y mostrar resultado.
-     *
-     * @param in Scanner para entrada por consola.
-     */
     public static void iniciarRonda(Scanner in) {
     }
 
