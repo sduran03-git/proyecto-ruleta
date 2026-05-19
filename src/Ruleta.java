@@ -118,21 +118,49 @@ public class Ruleta {
         historialSize++;
     }
 
-    /**
-     * Muestra en consola el resultado de la ronda.
-     *
-     * @param numero  número obtenido en la ruleta.
-     * @param tipo    tipo de apuesta realizada.
-     * @param monto   monto apostado.
-     * @param acierto si el jugador ganó o perdió.
-     */
-    public static void mostrarResultado(int numero, char tipo, int monto, boolean
-            acierto) {
+    public static void mostrarResultado(int numero, char tipo, int monto, boolean acierto) {
+        String color = esRojo(numero) ? "Rojo" : (numero == 0 ? "Verde" : "Negro");
+        System.out.println("\n--- RESULTADO ---");
+        System.out.println("Número: " + numero + " (" + color + ")");
+        System.out.println("Tu apuesta: " + tipo + " | Monto: $" + monto);
+        System.out.println(acierto ? "✔ ¡GANASTE $" + monto + "!" : "✘ Perdiste $" + monto);
     }
 
-    /**
-     * Muestra estadísticas generales de todas las rondas jugadas.
-     */
     public static void mostrarEstadisticas() {
+        if (historialSize == 0) {
+            System.out.println("Aún no hay rondas jugadas.");
+            return;
+        }
+        int totalApostado = calcularTotalApostado();
+        int totalAciertos = calcularTotalAciertos();
+        int gananciaNeta  = calcularGananciaNeta();
+        double porcentaje = (double) totalAciertos / historialSize * 100;
+
+        System.out.println("\n===== ESTADÍSTICAS =====");
+        System.out.println("Rondas jugadas : " + historialSize);
+        System.out.println("Total apostado : $" + totalApostado);
+        System.out.println("Aciertos       : " + totalAciertos);
+        System.out.printf ("Porcentaje     : %.1f%%%n", porcentaje);
+        System.out.println("Ganancia/Pérd. : $" + gananciaNeta);
+    }
+
+    public static int calcularTotalApostado() {
+        int total = 0;
+        for (int i = 0; i < historialSize; i++) total += historialApuestas[i];
+        return total;
+    }
+
+    public static int calcularTotalAciertos() {
+        int aciertos = 0;
+        for (int i = 0; i < historialSize; i++) if (historialAciertos[i]) aciertos++;
+        return aciertos;
+    }
+
+    public static int calcularGananciaNeta() {
+        int neta = 0;
+        for (int i = 0; i < historialSize; i++) {
+            neta += historialAciertos[i] ? historialApuestas[i] : -historialApuestas[i];
+        }
+        return neta;
     }
 }
