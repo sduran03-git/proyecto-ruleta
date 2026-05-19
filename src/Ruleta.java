@@ -111,6 +111,11 @@ public class Ruleta {
         return false;
     }
     public static void registrarResultado(int numero, int apuesta, boolean acierto) {
+        if (historialSize >= MAX_HISTORIAL) return;
+        historialNumeros [historialSize] = numero;
+        historialApuestas[historialSize] = apuesta;
+        historialAciertos[historialSize] = acierto;
+        historialSize++;
     }
 
     /**
