@@ -56,55 +56,60 @@ public class Ruleta {
     }
 
     public static void iniciarRonda(Scanner in) {
+        char tipo  = leerTipoApuesta(in);
+        int monto  = leerMonto(in);
+        int numero = girarRuleta();
+        boolean acierto = evaluarResultado(numero, tipo);
+        registrarResultado(numero, monto, acierto);
+        mostrarResultado(numero, tipo, monto, acierto);
     }
 
-    /**
-     * Permite al usuario seleccionar el tipo de apuesta (R/N/P/I).
-     *
-     * @param in Scanner para entrada por consola.
-     *           3
-     * @return el tipo de apuesta elegido.
-     */
     public static char leerTipoApuesta(Scanner in) {
-        return ' ';
+        System.out.println("Tipo de apuesta: (R)ojo / (N)egro / (P)ar / (I)mpar");
+        System.out.print("Tu apuesta: ");
+        String linea = in.nextLine().trim().toUpperCase();
+        if (!linea.isEmpty() && "RNPI".indexOf(linea.charAt(0)) >= 0) {
+            return linea.charAt(0);
+        }
+        System.out.println("Opción inválida, se usará (P)ar por defecto.");
+        return 'P';
     }
 
-    /**
-     * Simula el giro de la ruleta generando un número aleatorio de 0 a 36.
-     *
-     * @return número de la ruleta.
-     */
+    public static int leerMonto(Scanner in) {
+        System.out.print("Monto a apostar: $");
+        try {
+            int monto = Integer.parseInt(in.nextLine().trim());
+            return Math.max(monto, 1);
+        } catch (NumberFormatException e) {
+            System.out.println("Monto inválido, se usará $1.");
+            return 1;
+        }
+    }
+
     public static int girarRuleta() {
-        return 0;
+        return rng.nextInt(37);
     }
 
-    /**
-     * Evalúa si la apuesta realizada por el jugador fue acertada.
-     *
-     * @param numero número obtenido en la ruleta.
-     * @param tipo   tipo de apuesta elegida.
-     * @return true si acertó, false si perdió.
-     */
     public static boolean evaluarResultado(int numero, char tipo) {
-        return false;
+        if (tipo == 'R') {
+            return esRojo(numero);
+        } else if (tipo == 'N') {
+            return !esRojo(numero) && numero != 0;
+        } else if (tipo == 'P') {
+            return numero != 0 && numero % 2 == 0;
+        } else if (tipo == 'I') {
+            return numero % 2 != 0;
+        } else {
+            return false;
+        }
     }
 
-    /**
-     * Determina si un número corresponde a color rojo.
-     *
-     * @param n número de la ruleta.
-     * @return true si es rojo, false en caso contrario.
-     */
     public static boolean esRojo(int n) {
+        for (int rojo : NUMEROS_ROJOS) {
+            if (n == rojo) return true;
+        }
         return false;
     }
-/**
- * Registra los resultados de la ronda en los arreglos de historial.
- * @param numero número obtenido en la ruleta.
- * @param apuesta monto apostado.
- * @param acierto si el jugador acertó o no.
- */
-
     public static void registrarResultado(int numero, int apuesta, boolean acierto) {
     }
 
