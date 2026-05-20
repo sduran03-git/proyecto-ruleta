@@ -74,8 +74,14 @@ public class VentanaRuleta {
     }
 
     private void jugar() {
+        if (saldoInsuficiente()) return;
         char tipo  = obtenerTipoApuesta();
         int monto  = (int) spinMonto.getValue();
+        if (monto > ruleta.getSaldo()) {
+            JOptionPane.showMessageDialog(frame,
+                    "No tienes suficiente saldo para esa apuesta.");
+            return;
+        }
         int numero = ruleta.girar();
         boolean acierto = ruleta.evaluarResultado(numero, tipo);
         ruleta.registrarResultado(numero, monto, acierto);
@@ -83,6 +89,15 @@ public class VentanaRuleta {
         actualizarSaldo();
     }
 
+    private boolean saldoInsuficiente() {
+        if (ruleta.getSaldo() <= 0) {
+            JOptionPane.showMessageDialog(frame,
+                    "¡Te quedaste sin saldo! Vuelve al menú.");
+            btnGirar.setEnabled(false);
+            return true;
+        }
+        return false;
+    }
     private char obtenerTipoApuesta() {
         if (cmbTipo.getSelectedItem().equals("Color")) {
             return cmbColor.getSelectedItem().equals("Rojo") ? 'R' : 'N';
