@@ -24,8 +24,7 @@ public class VentanaRuleta {
 
     public VentanaRuleta(RuletaController ruletaController) {
         this.ruletaController    = ruletaController;
-        this.resultadoController = new ResultadoController(new Ruleta(
-                ruletaController.getSaldo()));
+        this.resultadoController = new ResultadoController(ruletaController.getRuleta());
         configurarVentana();
         configurarComponentes();
         configurarEventos();
