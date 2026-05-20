@@ -35,6 +35,9 @@ public class VentanaSaludo {
 
     private void abrirRuleta() {
         JOptionPane.showMessageDialog(frame, "Abriendo Ruleta...");
+        frame.setVisible(false);
+        Ruleta.menu();
+        frame.setVisible(true);
     }
 
     public void mostrarVentana() {
