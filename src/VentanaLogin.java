@@ -72,8 +72,8 @@ public class VentanaLogin {
 
     private void abrirSaludo(String nombre) {
         frame.dispose();
-        VentanaSaludo saludo = new VentanaSaludo(nombre);
-        saludo.mostrarVentana();
+        VentanaMenu menu = new VentanaMenu(nombre);
+        menu.mostrarVentana();
     }
 
     private void abrirRegistro() {
