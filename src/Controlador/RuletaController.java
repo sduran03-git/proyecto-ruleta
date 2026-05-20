@@ -56,4 +56,8 @@ public class RuletaController {
                 "Ganancia/Pérd. : $" + ruleta.getGananciaNeta() + "\n" +
                 "Saldo actual   : $" + ruleta.getSaldo();
     }
+
+    public Ruleta getRuleta() {
+        return ruleta;
+    }
 }
