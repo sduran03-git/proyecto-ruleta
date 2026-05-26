@@ -2,29 +2,29 @@ package Vista;
 
 import Controlador.ResultadoController;
 import Controlador.RuletaController;
+import Controlador.SessionController;
 import Modelo.Resultado;
-import Modelo.Ruleta;
 import Modelo.TipoApuesta;
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaRuleta {
 
-    private final JFrame frame          = new JFrame("Ruleta - Casino Black Cat");
-    private final JComboBox<String> cmbTipo    = new JComboBox<>();
-    private final JComboBox<String> cmbColor   = new JComboBox<>();
-    private final JComboBox<String> cmbParidad = new JComboBox<>();
-    private final JSpinner spinMonto           = new JSpinner(
+    private final JFrame             frame          = new JFrame("Ruleta - Casino Black Cat");
+    private final JComboBox<String>  cmbTipo        = new JComboBox<>();
+    private final JComboBox<String>  cmbColor       = new JComboBox<>();
+    private final JComboBox<String>  cmbParidad     = new JComboBox<>();
+    private final JSpinner           spinMonto      = new JSpinner(
             new SpinnerNumberModel(100, 1, 10000, 50));
-    private final JButton btnGirar             = new JButton("Girar");
-    private final JLabel lblSaldo              = new JLabel();
-    private final JTextArea txtResultados      = new JTextArea();
-    private final RuletaController ruletaController;
+    private final JButton            btnGirar       = new JButton("Girar");
+    private final JLabel             lblSaldo       = new JLabel();
+    private final JTextArea          txtResultados  = new JTextArea();
+    private final RuletaController   ruletaController;
     private final ResultadoController resultadoController;
 
-    public VentanaRuleta(RuletaController ruletaController) {
+    public VentanaRuleta(RuletaController ruletaController, SessionController session) {
         this.ruletaController    = ruletaController;
-        this.resultadoController = new ResultadoController(ruletaController.getRuleta());
+        this.resultadoController = new ResultadoController(session);
         configurarVentana();
         configurarComponentes();
         configurarEventos();
@@ -38,36 +38,25 @@ public class VentanaRuleta {
     }
 
     private void configurarComponentes() {
-        JPanel panelApuesta   = crearPanelApuesta();
-        JPanel panelResultado = crearPanelResultado();
-        frame.add(panelApuesta,   BorderLayout.NORTH);
-        frame.add(panelResultado, BorderLayout.CENTER);
+        frame.add(crearPanelApuesta(),   BorderLayout.NORTH);
+        frame.add(crearPanelResultado(), BorderLayout.CENTER);
     }
 
     private JPanel crearPanelApuesta() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 5, 5));
-        cmbTipo.addItem("Color");
-        cmbTipo.addItem("Paridad");
-        cmbColor.addItem("Rojo");
-        cmbColor.addItem("Negro");
-        cmbParidad.addItem("Par");
-        cmbParidad.addItem("Impar");
-        panel.add(new JLabel("Tipo de apuesta:"));
-        panel.add(cmbTipo);
-        panel.add(new JLabel("Seleccione color:"));
-        panel.add(cmbColor);
-        panel.add(new JLabel("Seleccione paridad:"));
-        panel.add(cmbParidad);
-        panel.add(new JLabel("Monto:"));
-        panel.add(crearPanelMonto());
+        cmbTipo.addItem("Color");    cmbTipo.addItem("Paridad");
+        cmbColor.addItem("Rojo");    cmbColor.addItem("Negro");
+        cmbParidad.addItem("Par");   cmbParidad.addItem("Impar");
+        panel.add(new JLabel("Tipo de apuesta:"));  panel.add(cmbTipo);
+        panel.add(new JLabel("Seleccione color:"));  panel.add(cmbColor);
+        panel.add(new JLabel("Seleccione paridad:")); panel.add(cmbParidad);
+        panel.add(new JLabel("Monto:"));             panel.add(crearPanelMonto());
         return panel;
     }
 
     private JPanel crearPanelMonto() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel.add(spinMonto);
-        panel.add(btnGirar);
-        panel.add(lblSaldo);
+        panel.add(spinMonto); panel.add(btnGirar); panel.add(lblSaldo);
         return panel;
     }
 
@@ -90,8 +79,8 @@ public class VentanaRuleta {
                     "No tienes suficiente saldo para esa apuesta.");
             return;
         }
-        TipoApuesta tipo     = obtenerTipoApuesta();
-        Resultado resultado  = ruletaController.jugar(tipo, monto);
+        TipoApuesta tipo      = obtenerTipoApuesta();
+        Resultado   resultado = ruletaController.jugar(tipo, monto);
         mostrarResultado(resultado);
         refrescarSaldo();
     }
