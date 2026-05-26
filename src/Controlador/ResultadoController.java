@@ -1,50 +1,47 @@
 package Controlador;
 
 import Modelo.Resultado;
-import Modelo.Ruleta;
+import java.util.List;
 
 public class ResultadoController {
 
-    private final Ruleta ruleta;
+    private final SessionController session;
 
-    public ResultadoController(Ruleta ruleta) {
-        this.ruleta = ruleta;
+    public ResultadoController(SessionController session) {
+        this.session = session;
     }
 
-    public String formatearResultado(Resultado resultado) {
-        String color  = obtenerColor(resultado.getNumero());
-        String estado = resultado.isAcierto() ? "GANASTE" : "PERDISTE";
-        return "Número " + resultado.getNumero() +
-                " (" + color + ")" +
-                " | Apuesta=" + resultado.getTipo() +
-                " | Monto=$" + resultado.getMonto() +
-                " | " + estado +
-                " | Saldo=$" + resultado.getSaldoTrasApuesta();
+    public String formatearResultado(Resultado r) {
+        String estado  = r.isAcierto() ? "GANASTE" : "PERDISTE";
+        String tipo    = r.getTipo().toString();
+        return "Número: " + r.getNumero()
+                + " | Apuesta: " + tipo
+                + " | Monto: $" + r.getMonto()
+                + " | " + estado
+                + " | Saldo: $" + r.getSaldoTrasApuesta();
     }
 
-    private String obtenerColor(int numero) {
-        if (numero == 0)          return "Verde";
-        if (ruleta.esRojo(numero)) return "Rojo";
-        return "Negro";
+    public List<Resultado> getHistorial() {
+        return session.getHistorialUsuario();
     }
 
-    public String formatearHistorial() {
-        if (ruleta.getHistorialSize() == 0) {
-            return "Aún no hay rondas jugadas.";
+    public int getTotalJugadas() {
+        return getHistorial().size();
+    }
+
+    public int getTotalAciertos() {
+        int aciertos = 0;
+        for (Resultado r : getHistorial()) {
+            if (r.isAcierto()) aciertos++;
         }
-        StringBuilder sb = new StringBuilder("===== HISTORIAL =====\n");
-        for (Resultado r : ruleta.getHistorial()) {
-            sb.append(formatearResultado(r)).append("\n");
-        }
-        return sb.toString();
+        return aciertos;
     }
 
-    public String formatearEstadisticas() {
-        return "===== ESTADÍSTICAS =====\n" +
-                "Rondas jugadas : " + ruleta.getHistorialSize() + "\n" +
-                "Total apostado : $" + ruleta.getTotalApostado() + "\n" +
-                "Aciertos       : " + ruleta.getTotalAciertos() + "\n" +
-                "Ganancia/Pérd. : $" + ruleta.getGananciaNeta() + "\n" +
-                "Saldo actual   : $" + ruleta.getSaldo();
+    public int getGananciaNeta() {
+        int neta = 0;
+        for (Resultado r : getHistorial()) {
+            neta += r.isAcierto() ? r.getMonto() : -r.getMonto();
+        }
+        return neta;
     }
 }
