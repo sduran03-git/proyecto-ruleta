@@ -6,15 +6,23 @@ import Modelo.TipoApuesta;
 
 public class RuletaController {
 
-    private final Ruleta ruleta;
+    private final Ruleta           ruleta;
+    private final SessionController session;
 
-    public RuletaController(int saldoInicial) {
-        this.ruleta = new Ruleta(saldoInicial);
+    public RuletaController(Ruleta ruleta, SessionController session) {
+        this.ruleta  = ruleta;
+        this.session = session;
     }
 
     public Resultado jugar(TipoApuesta tipo, int monto) {
-        int numero = ruleta.girar();
-        return ruleta.registrarResultado(numero, tipo, monto);
+        int numero        = ruleta.girar();
+        Resultado resultado = ruleta.registrarResultado(numero, tipo, monto);
+        session.registrarResultadoEnUsuario(resultado);
+        return resultado;
+    }
+
+    public void depositar(int monto) {
+        ruleta.depositar(monto);
     }
 
     public boolean saldoSuficiente(int monto) {
@@ -25,36 +33,8 @@ public class RuletaController {
         return ruleta.getSaldo() > 0;
     }
 
-    public void depositar(int monto) {
-        ruleta.depositar(monto);
-    }
-
     public int getSaldo() {
         return ruleta.getSaldo();
-    }
-
-    public int getHistorialSize() {
-        return ruleta.getHistorialSize();
-    }
-
-    public int getTotalApostado() {
-        return ruleta.getTotalApostado();
-    }
-
-    public int getTotalAciertos() {
-        return ruleta.getTotalAciertos();
-    }
-
-    public int getGananciaNeta() {
-        return ruleta.getGananciaNeta();
-    }
-
-    public String getResumenHistorial() {
-        return "Rondas jugadas : " + ruleta.getHistorialSize() + "\n" +
-                "Total apostado : $" + ruleta.getTotalApostado() + "\n" +
-                "Aciertos       : " + ruleta.getTotalAciertos() + "\n" +
-                "Ganancia/Pérd. : $" + ruleta.getGananciaNeta() + "\n" +
-                "Saldo actual   : $" + ruleta.getSaldo();
     }
 
     public Ruleta getRuleta() {

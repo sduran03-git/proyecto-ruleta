@@ -1,5 +1,6 @@
 package Controlador;
 
+import Modelo.Resultado;
 import Modelo.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,7 @@ public class SessionController {
     private final List<Usuario> usuarios = new ArrayList<>();
 
     public SessionController() {
-        cargarUsuariosPorDefecto();
-    }
-
-    private void cargarUsuariosPorDefecto() {
-        usuarios.add(new Usuario("admin",    "1234", "Administrador"));
-        usuarios.add(new Usuario("play erwan", "abcd", "Seba"));
+        usuarios.add(new Usuario("admin", "1234", "Administrador"));
     }
 
     public boolean iniciarSesion(String username, String password) {
@@ -28,34 +24,45 @@ public class SessionController {
         return false;
     }
 
-    public void registrarUsuario(String username, String password, String nombre) {
-        if (username == null || username.isBlank()) return;
-        if (password == null || password.isBlank()) return;
-        if (nombre   == null || nombre.isBlank())   return;
+    public boolean registrarUsuario(String username, String password, String nombre) {
+        if (existeUsername(username)) return false;
         usuarios.add(new Usuario(username, password, nombre));
+        return true;
     }
 
     public void cerrarSesion() {
         usuarioActual = null;
     }
 
-    public boolean hayUsuario() {
+    public boolean haySesionActiva() {
         return usuarioActual != null;
     }
 
     public String getNombreUsuario() {
-        return hayUsuario() ? usuarioActual.getNombre() : "";
+        return usuarioActual != null ? usuarioActual.getNombre() : "";
     }
 
     public String getUsernameUsuario() {
-        return hayUsuario() ? usuarioActual.getUsername() : "";
-    }
-
-    public Usuario getUsuarioActual() {
-        return usuarioActual;
+        return usuarioActual != null ? usuarioActual.getUsername() : "";
     }
 
     public void setNombreUsuario(String nombre) {
-        if (hayUsuario()) usuarioActual.setNombre(nombre);
+        if (usuarioActual != null) usuarioActual.setNombre(nombre);
+    }
+
+    public void registrarResultadoEnUsuario(Resultado resultado) {
+        if (usuarioActual != null) usuarioActual.agregarResultado(resultado);
+    }
+
+    public List<Resultado> getHistorialUsuario() {
+        if (usuarioActual == null) return new ArrayList<>();
+        return usuarioActual.getHistorial();
+    }
+
+    private boolean existeUsername(String username) {
+        for (Usuario u : usuarios) {
+            if (u.getUsername().equals(username)) return true;
+        }
+        return false;
     }
 }
