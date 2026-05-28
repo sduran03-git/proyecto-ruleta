@@ -1,41 +1,57 @@
 package Modelo;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Estadisticas {
 
-	private List<Resultado> historial;
+	private final List<Resultado> historial;
 
-	/**
-	 * 
-	 * @param historial
-	 */
 	public Estadisticas(List<Resultado> historial) {
-		// TODO - implement Estadisticas.Estadisticas
-		throw new UnsupportedOperationException();
+		this.historial = historial;
 	}
 
 	public int getTotalJugadas() {
-		// TODO - implement Estadisticas.getTotalJugadas
-		throw new UnsupportedOperationException();
+		return historial.size();
 	}
 
 	public int getVictorias() {
-		// TODO - implement Estadisticas.getVictorias
-		throw new UnsupportedOperationException();
+		int victorias = 0;
+		for (Resultado r : historial) {
+			if (r.isAcierto()) victorias++;
+		}
+		return victorias;
 	}
 
-	public int getPorcentajeVictorias() {
-		// TODO - implement Estadisticas.getPorcentajeVictorias
-		throw new UnsupportedOperationException();
+	public double getPorcentajeVictorias() {
+		if (historial.isEmpty()) return 0.0;
+		return (getVictorias() * 100.0) / getTotalJugadas();
 	}
 
 	public int getRachaMaxima() {
-		// TODO - implement Estadisticas.getRachaMaxima
-		throw new UnsupportedOperationException();
+		int rachaActual = 0;
+		int rachaMax    = 0;
+		for (Resultado r : historial) {
+			if (r.isAcierto()) {
+				rachaActual++;
+				if (rachaActual > rachaMax) rachaMax = rachaActual;
+			} else {
+				rachaActual = 0;
+			}
+		}
+		return rachaMax;
 	}
 
 	public TipoApuesta getTipoMasJugado() {
-		// TODO - implement Estadisticas.getTipoMasJugado
-		throw new UnsupportedOperationException();
+		if (historial.isEmpty()) return null;
+		Map<TipoApuesta, Integer> conteo = new HashMap<>();
+		for (Resultado r : historial) {
+			TipoApuesta tipo = r.getTipo();
+			conteo.put(tipo, conteo.getOrDefault(tipo, 0) + 1);
+		}
+		return conteo.entrySet().stream()
+				.max(Map.Entry.comparingByValue())
+				.get().getKey();
 	}
-
 }
