@@ -56,7 +56,9 @@ public class VentanaMenu {
     }
 
     private void abrirRuleta() {
-        new VentanaRuleta(ruletaController, session).mostrarVentana();
+        VentanaRuleta ventana = new VentanaRuleta(ruletaController, session);
+        ventana.mostrarVentana();
+        ventana.alCerrar(this::refrescarSaldo);
     }
 
     private void abrirHistorial() {
@@ -68,7 +70,9 @@ public class VentanaMenu {
     }
 
     private void abrirPerfil() {
-        new VentanaPerfil(session, ruletaController).mostrarVentana();
+        VentanaPerfil ventana = new VentanaPerfil(session, ruletaController);
+        ventana.mostrarVentana();
+        ventana.alCerrar(this::refrescarSaldo);
     }
 
     private void cerrarSesion() {

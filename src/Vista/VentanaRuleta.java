@@ -118,4 +118,14 @@ public class VentanaRuleta {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
+    public void alCerrar(Runnable callback) {
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                callback.run();
+            }
+        });
+    }
+
 }
