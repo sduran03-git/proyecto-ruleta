@@ -3,22 +3,26 @@ package Vista;
 import Controlador.ResultadoController;
 import Controlador.RuletaController;
 import Controlador.SessionController;
+import Modelo.ApuestaBase;
+import Modelo.ApuestaImpar;
+import Modelo.ApuestaNegro;
+import Modelo.ApuestaPar;
+import Modelo.ApuestaRojo;
 import Modelo.Resultado;
-import Modelo.TipoApuesta;
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaRuleta {
 
-    private final JFrame             frame          = new JFrame("Ruleta - Casino Black Cat");
-    private final JComboBox<String>  cmbTipo        = new JComboBox<>();
-    private final JComboBox<String>  cmbColor       = new JComboBox<>();
-    private final JComboBox<String>  cmbParidad     = new JComboBox<>();
-    private final JSpinner           spinMonto      = new JSpinner(
+    private final JFrame            frame         = new JFrame("Ruleta - Casino Black Cat");
+    private final JComboBox<String> cmbTipo       = new JComboBox<>();
+    private final JComboBox<String> cmbColor      = new JComboBox<>();
+    private final JComboBox<String> cmbParidad    = new JComboBox<>();
+    private final JSpinner          spinMonto     = new JSpinner(
             new SpinnerNumberModel(100, 1, 10000, 50));
-    private final JButton            btnGirar       = new JButton("Girar");
-    private final JLabel             lblSaldo       = new JLabel();
-    private final JTextArea          txtResultados  = new JTextArea();
+    private final JButton           btnGirar      = new JButton("Girar");
+    private final JLabel            lblSaldo      = new JLabel();
+    private final JTextArea         txtResultados = new JTextArea();
     private final RuletaController   ruletaController;
     private final ResultadoController resultadoController;
 
@@ -44,10 +48,10 @@ public class VentanaRuleta {
 
     private JPanel crearPanelApuesta() {
         JPanel panel = new JPanel(new GridLayout(5, 2, 5, 5));
-        cmbTipo.addItem("Color");    cmbTipo.addItem("Paridad");
-        cmbColor.addItem("Rojo");    cmbColor.addItem("Negro");
-        cmbParidad.addItem("Par");   cmbParidad.addItem("Impar");
-        panel.add(new JLabel("Tipo de apuesta:"));  panel.add(cmbTipo);
+        cmbTipo.addItem("Color");     cmbTipo.addItem("Paridad");
+        cmbColor.addItem("Rojo");     cmbColor.addItem("Negro");
+        cmbParidad.addItem("Par");    cmbParidad.addItem("Impar");
+        panel.add(new JLabel("Tipo de apuesta:"));   panel.add(cmbTipo);
         panel.add(new JLabel("Seleccione color:"));  panel.add(cmbColor);
         panel.add(new JLabel("Seleccione paridad:")); panel.add(cmbParidad);
         panel.add(new JLabel("Monto:"));             panel.add(crearPanelMonto());
@@ -68,7 +72,7 @@ public class VentanaRuleta {
     }
 
     private void configurarEventos() {
-        btnGirar.addActionListener(e -> intentarJugar());
+        btnGirar.addActionListener(_ -> intentarJugar());
     }
 
     private void intentarJugar() {
@@ -79,19 +83,19 @@ public class VentanaRuleta {
                     "No tienes suficiente saldo para esa apuesta.");
             return;
         }
-        TipoApuesta tipo      = obtenerTipoApuesta();
-        Resultado   resultado = ruletaController.jugar(tipo, monto);
+        ApuestaBase apuesta   = obtenerApuesta(monto);
+        Resultado   resultado = ruletaController.jugar(apuesta);
         mostrarResultado(resultado);
         refrescarSaldo();
     }
 
-    private TipoApuesta obtenerTipoApuesta() {
+    private ApuestaBase obtenerApuesta(int monto) {
         if (cmbTipo.getSelectedItem().equals("Color")) {
             return cmbColor.getSelectedItem().equals("Rojo") ?
-                    TipoApuesta.ROJO : TipoApuesta.NEGRO;
+                    new ApuestaRojo(monto) : new ApuestaNegro(monto);
         } else {
             return cmbParidad.getSelectedItem().equals("Par") ?
-                    TipoApuesta.PAR : TipoApuesta.IMPAR;
+                    new ApuestaPar(monto) : new ApuestaImpar(monto);
         }
     }
 
@@ -114,11 +118,6 @@ public class VentanaRuleta {
         lblSaldo.setText("Saldo: $" + ruletaController.getSaldo());
     }
 
-    public void mostrarVentana() {
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
     public void alCerrar(Runnable callback) {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -128,4 +127,8 @@ public class VentanaRuleta {
         });
     }
 
+    public void mostrarVentana() {
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
 }
