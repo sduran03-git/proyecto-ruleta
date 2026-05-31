@@ -2,7 +2,6 @@ package Vista;
 
 import Controlador.EstadisticasController;
 import Controlador.SessionController;
-import Modelo.TipoApuesta;
 import javax.swing.*;
 import java.awt.*;
 
@@ -57,9 +56,8 @@ public class VentanaEstadisticas {
     }
 
     private void cargarTipoMasJugado() {
-        TipoApuesta tipo = estadisticasController.getTipoMasJugado();
-        String texto     = (tipo != null) ? tipo.toString() : "Sin jugadas aún";
-        lblTipoMasJugado.setText("Tipo más jugado:     " + texto);
+        String tipo = estadisticasController.getTipoMasJugado();
+        lblTipoMasJugado.setText("Tipo más jugado:     " + tipo);
     }
 
     public void mostrarVentana() {
