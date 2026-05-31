@@ -13,7 +13,7 @@ public class ResultadoController {
 
     public String formatearResultado(Resultado r) {
         String estado  = r.isAcierto() ? "GANASTE" : "PERDISTE";
-        String tipo    = r.getTipo().toString();
+        String tipo = r.getEtiquetaApuesta();
         return "Número: " + r.getNumero()
                 + " | Apuesta: " + tipo
                 + " | Monto: $" + r.getMonto()

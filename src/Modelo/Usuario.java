@@ -23,6 +23,7 @@ public class Usuario {
 
     public String getUsername() { return username; }
     public String getNombre()   { return nombre; }
+    public String getPassword() {return password;}
 
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) return;
