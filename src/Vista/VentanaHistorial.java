@@ -59,7 +59,7 @@ public class VentanaHistorial {
             modelo.addRow(new Object[]{
                     fila++,
                     r.getNumero(),
-                    r.getTipo(),
+                    r.getEtiquetaApuesta(),
                     "$" + r.getMonto(),
                     r.isAcierto() ? "GANASTE" : "PERDISTE",
                     "$" + r.getSaldoTrasApuesta()
