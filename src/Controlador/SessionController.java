@@ -1,5 +1,6 @@
 package Controlador;
 
+import Modelo.PersistenciaUsuarios;
 import Modelo.Resultado;
 import Modelo.Usuario;
 import java.util.ArrayList;
@@ -8,10 +9,15 @@ import java.util.List;
 public class SessionController {
 
     private Usuario usuarioActual;
-    private final List<Usuario> usuarios = new ArrayList<>();
+    private final List<Usuario>          usuarios     = new ArrayList<>();
+    private final PersistenciaUsuarios   persistencia = new PersistenciaUsuarios();
 
     public SessionController() {
-        usuarios.add(new Usuario("admin", "1234", "Administrador"));
+        usuarios.addAll(persistencia.cargar());
+        if (usuarios.isEmpty()) {
+            usuarios.add(new Usuario("admin", "1234", "Administrador"));
+            persistencia.guardar(usuarios);
+        }
     }
 
     public boolean iniciarSesion(String username, String password) {
@@ -27,6 +33,7 @@ public class SessionController {
     public boolean registrarUsuario(String username, String password, String nombre) {
         if (existeUsername(username)) return false;
         usuarios.add(new Usuario(username, password, nombre));
+        persistencia.guardar(usuarios);
         return true;
     }
 
@@ -47,7 +54,10 @@ public class SessionController {
     }
 
     public void setNombreUsuario(String nombre) {
-        if (usuarioActual != null) usuarioActual.setNombre(nombre);
+        if (usuarioActual != null) {
+            usuarioActual.setNombre(nombre);
+            persistencia.guardar(usuarios);
+        }
     }
 
     public void registrarResultadoEnUsuario(Resultado resultado) {
