@@ -1,7 +1,6 @@
 package Controlador;
 
 import Modelo.Estadisticas;
-import Modelo.TipoApuesta;
 
 public class EstadisticasController {
 
@@ -31,7 +30,7 @@ public class EstadisticasController {
         return construirEstadisticas().getRachaMaxima();
     }
 
-    public TipoApuesta getTipoMasJugado() {
+    public String getTipoMasJugado() {
         return construirEstadisticas().getTipoMasJugado();
     }
 }
