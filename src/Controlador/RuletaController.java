@@ -1,12 +1,12 @@
 package Controlador;
 
+import Modelo.ApuestaBase;
 import Modelo.Resultado;
 import Modelo.Ruleta;
-import Modelo.TipoApuesta;
 
 public class RuletaController {
 
-    private final Ruleta           ruleta;
+    private final Ruleta            ruleta;
     private final SessionController session;
 
     public RuletaController(Ruleta ruleta, SessionController session) {
@@ -14,9 +14,8 @@ public class RuletaController {
         this.session = session;
     }
 
-    public Resultado jugar(TipoApuesta tipo, int monto) {
-        int numero        = ruleta.girar();
-        Resultado resultado = ruleta.registrarResultado(numero, tipo, monto);
+    public Resultado jugar(ApuestaBase apuesta) {
+        Resultado resultado = ruleta.jugar(apuesta);
         session.registrarResultadoEnUsuario(resultado);
         return resultado;
     }
@@ -26,11 +25,11 @@ public class RuletaController {
     }
 
     public boolean saldoSuficiente(int monto) {
-        return ruleta.getSaldo() >= monto;
+        return ruleta.saldoSuficiente(monto);
     }
 
     public boolean haySaldo() {
-        return ruleta.getSaldo() > 0;
+        return ruleta.haySaldo();
     }
 
     public int getSaldo() {
