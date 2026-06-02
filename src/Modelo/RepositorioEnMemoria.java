@@ -1,19 +1,21 @@
 package Modelo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class RepositorioEnMemoria implements IRepositorioResultados {
 
-	/**
-	 * 
-	 * @param resultado
-	 */
+	private final List<Resultado> historial = new ArrayList<>();
+
+	@Override
 	public void agregar(Resultado resultado) {
-		// TODO - implement RepositorioEnMemoria.agregar
-		throw new UnsupportedOperationException();
+		if (resultado == null) return;
+		historial.add(resultado);
 	}
 
+	@Override
 	public List<Resultado> obtenerTodos() {
-		// TODO - implement RepositorioEnMemoria.obtenerTodos
-		throw new UnsupportedOperationException();
+		return Collections.unmodifiableList(historial);
 	}
-
 }
