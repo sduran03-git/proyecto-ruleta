@@ -1,13 +1,10 @@
 package Modelo;
 
+import java.util.List;
+
 public interface IRepositorioResultados {
 
-	/**
-	 * 
-	 * @param resultado
-	 */
 	void agregar(Resultado resultado);
 
 	List<Resultado> obtenerTodos();
-
 }
