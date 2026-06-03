@@ -17,10 +17,6 @@ public class Usuario {
         this.nombre   = nombre;
     }
 
-    public Usuario() {
-        this("invitado", "0000", "Invitado");
-    }
-
     public String getUsername() { return username; }
     public String getNombre()   { return nombre; }
     public String getPassword() {return password;}
