@@ -6,33 +6,37 @@ import java.util.Map;
 
 public class Estadisticas {
 
-	private final List<Resultado> historial;
+	private final IRepositorioResultados repositorio;
 
-	public Estadisticas(List<Resultado> historial) {
-		this.historial = historial;
+	public Estadisticas(IRepositorioResultados repositorio) {
+		this.repositorio = repositorio;
+	}
+
+	private List<Resultado> getHistorial() {
+		return repositorio.obtenerTodos();
 	}
 
 	public int getTotalJugadas() {
-		return historial.size();
+		return getHistorial().size();
 	}
 
 	public int getVictorias() {
 		int victorias = 0;
-		for (Resultado r : historial) {
+		for (Resultado r : getHistorial()) {
 			if (r.isAcierto()) victorias++;
 		}
 		return victorias;
 	}
 
 	public double getPorcentajeVictorias() {
-		if (historial.isEmpty()) return 0.0;
+		if (getHistorial().isEmpty()) return 0.0;
 		return (getVictorias() * 100.0) / getTotalJugadas();
 	}
 
 	public int getRachaMaxima() {
 		int rachaActual = 0;
 		int rachaMax    = 0;
-		for (Resultado r : historial) {
+		for (Resultado r : getHistorial()) {
 			if (r.isAcierto()) {
 				rachaActual++;
 				if (rachaActual > rachaMax) rachaMax = rachaActual;
@@ -44,9 +48,9 @@ public class Estadisticas {
 	}
 
 	public String getTipoMasJugado() {
-		if (historial.isEmpty()) return "Sin jugadas";
+		if (getHistorial().isEmpty()) return "Sin jugadas";
 		Map<String, Integer> conteo = new HashMap<>();
-		for (Resultado r : historial) {
+		for (Resultado r : getHistorial()) {
 			String etiqueta = r.getEtiquetaApuesta();
 			conteo.put(etiqueta, conteo.getOrDefault(etiqueta, 0) + 1);
 		}

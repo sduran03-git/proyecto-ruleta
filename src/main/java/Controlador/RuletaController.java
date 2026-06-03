@@ -1,6 +1,7 @@
 package Controlador;
 
 import Modelo.ApuestaBase;
+import Modelo.IRepositorioResultados;
 import Modelo.Resultado;
 import Modelo.Ruleta;
 
@@ -9,8 +10,10 @@ public class RuletaController {
     private final Ruleta            ruleta;
     private final SessionController session;
 
-    public RuletaController(Ruleta ruleta, SessionController session) {
-        this.ruleta  = ruleta;
+    public RuletaController(int saldoInicial,
+                            IRepositorioResultados repositorio,
+                            SessionController session) {
+        this.ruleta  = new Ruleta(saldoInicial, repositorio);
         this.session = session;
     }
 
