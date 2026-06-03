@@ -1,7 +1,6 @@
 package Vista;
 
 import Controlador.EstadisticasController;
-import Controlador.SessionController;
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,8 +15,8 @@ public class VentanaEstadisticas {
     private final JButton btnCerrar          = new JButton("Cerrar");
     private final EstadisticasController estadisticasController;
 
-    public VentanaEstadisticas(SessionController session) {
-        this.estadisticasController = new EstadisticasController(session);
+    public VentanaEstadisticas(EstadisticasController estadisticasController) {
+        this.estadisticasController = estadisticasController;
         configurarVentana();
         configurarComponentes();
         configurarEventos();
@@ -44,20 +43,20 @@ public class VentanaEstadisticas {
     }
 
     private void cargarEstadisticas() {
-        lblTotalJugadas.setText("Total jugadas:       "
+        lblTotalJugadas.setText("Total jugadas:        "
                 + estadisticasController.getTotalJugadas());
-        lblVictorias.setText("Victorias:           "
+        lblVictorias.setText("Victorias:            "
                 + estadisticasController.getVictorias());
         lblPorcentaje.setText("Porcentaje victorias: "
                 + String.format("%.1f", estadisticasController.getPorcentajeVictorias()) + "%");
-        lblRachaMaxima.setText("Racha máxima:        "
+        lblRachaMaxima.setText("Racha máxima:         "
                 + estadisticasController.getRachaMaxima());
         cargarTipoMasJugado();
     }
 
     private void cargarTipoMasJugado() {
         String tipo = estadisticasController.getTipoMasJugado();
-        lblTipoMasJugado.setText("Tipo más jugado:     " + tipo);
+        lblTipoMasJugado.setText("Tipo más jugado:      " + tipo);
     }
 
     public void mostrarVentana() {
