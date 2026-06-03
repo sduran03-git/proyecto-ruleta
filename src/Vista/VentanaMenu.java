@@ -1,9 +1,11 @@
 package Vista;
 
+import Controlador.EstadisticasController;
 import Controlador.ResultadoController;
 import Controlador.RuletaController;
 import Controlador.SessionController;
-import Modelo.Ruleta;
+import Modelo.IRepositorioResultados;
+import Modelo.RepositorioArchivo;
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,14 +19,17 @@ public class VentanaMenu {
     private final JButton btnEstadisticas = new JButton("Estadísticas");
     private final JButton btnPerfil       = new JButton("Ver perfil");
     private final JButton btnSalir        = new JButton("Cerrar sesión");
-    private final SessionController   session;
-    private final RuletaController    ruletaController;
-    private final ResultadoController resultadoController;
+    private final SessionController      session;
+    private final RuletaController       ruletaController;
+    private final ResultadoController    resultadoController;
+    private final EstadisticasController estadisticasController;
 
     public VentanaMenu(SessionController session) {
-        this.session             = session;
-        this.ruletaController    = new RuletaController(new Ruleta(1000), session);
-        this.resultadoController = new ResultadoController(session);
+        this.session                = session;
+        IRepositorioResultados repo = new RepositorioArchivo();
+        this.ruletaController       = new RuletaController(1000, repo, session);
+        this.resultadoController    = new ResultadoController(session);
+        this.estadisticasController = new EstadisticasController(repo);
         configurarVentana();
         configurarComponentes();
         configurarEventos();
@@ -66,7 +71,7 @@ public class VentanaMenu {
     }
 
     private void abrirEstadisticas() {
-        new VentanaEstadisticas(session).mostrarVentana();
+        new VentanaEstadisticas(estadisticasController).mostrarVentana();
     }
 
     private void abrirPerfil() {

@@ -1,6 +1,5 @@
 package Modelo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,11 +9,17 @@ public class Ruleta {
             {1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36};
 
     private int saldo;
-    private final Random         rng      = new Random();
-    private final List<Resultado> historial = new ArrayList<>();
+    private final Random                  rng        = new Random();
+    private final IRepositorioResultados  repositorio;
 
-    public Ruleta(int saldoInicial) { this.saldo = saldoInicial; }
-    public Ruleta()                 { this(0); }
+    public Ruleta(int saldoInicial, IRepositorioResultados repositorio) {
+        this.saldo      = saldoInicial;
+        this.repositorio = repositorio;
+    }
+
+    public Ruleta(IRepositorioResultados repositorio) {
+        this(0, repositorio);
+    }
 
     public int girar() {
         return rng.nextInt(37);
@@ -34,7 +39,7 @@ public class Ruleta {
         boolean acierto = apuesta.acierta(numero, color);
         actualizarSaldo(apuesta.getMonto(), acierto);
         Resultado resultado = new Resultado(numero, apuesta, acierto, saldo);
-        historial.add(resultado);
+        repositorio.agregar(resultado);
         return resultado;
     }
 
@@ -56,25 +61,27 @@ public class Ruleta {
         return saldo > 0;
     }
 
-    public int              getSaldo()        { return saldo; }
-    public int              getHistorialSize() { return historial.size(); }
-    public List<Resultado>  getHistorial()    { return historial; }
+    public int           getSaldo()      { return saldo; }
+    public List<Resultado> getHistorial() { return repositorio.obtenerTodos(); }
+    public int getHistorialSize()         { return repositorio.obtenerTodos().size(); }
 
     public int getTotalApostado() {
         int total = 0;
-        for (Resultado r : historial) total += r.getMonto();
+        for (Resultado r : repositorio.obtenerTodos()) total += r.getMonto();
         return total;
     }
 
     public int getTotalAciertos() {
         int aciertos = 0;
-        for (Resultado r : historial) if (r.isAcierto()) aciertos++;
+        for (Resultado r : repositorio.obtenerTodos()) {
+            if (r.isAcierto()) aciertos++;
+        }
         return aciertos;
     }
 
     public int getGananciaNeta() {
         int neta = 0;
-        for (Resultado r : historial) {
+        for (Resultado r : repositorio.obtenerTodos()) {
             neta += r.isAcierto() ? r.getMonto() : -r.getMonto();
         }
         return neta;
