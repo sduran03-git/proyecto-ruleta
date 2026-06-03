@@ -1,17 +1,18 @@
 package Controlador;
 
 import Modelo.Estadisticas;
+import Modelo.IRepositorioResultados;
 
 public class EstadisticasController {
 
-    private final SessionController session;
+    private final IRepositorioResultados repositorio;
 
-    public EstadisticasController(SessionController session) {
-        this.session = session;
+    public EstadisticasController(IRepositorioResultados repositorio) {
+        this.repositorio = repositorio;
     }
 
     private Estadisticas construirEstadisticas() {
-        return new Estadisticas(session.getHistorialUsuario());
+        return new Estadisticas(repositorio);
     }
 
     public int getTotalJugadas() {
