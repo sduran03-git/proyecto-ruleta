@@ -3,4 +3,4 @@
 
 ---
 
-## Lab08 — Interfaces y Principio de Inversión de Dependencias (DIP)
+## Lab09 — Uso de pruebas unitarias
