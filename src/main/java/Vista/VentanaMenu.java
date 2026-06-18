@@ -53,11 +53,11 @@ public class VentanaMenu {
     }
 
     private void configurarEventos() {
-        btnJugar.addActionListener(_        -> abrirRuleta());
-        btnHistorial.addActionListener(_    -> abrirHistorial());
-        btnEstadisticas.addActionListener(_ -> abrirEstadisticas());
-        btnPerfil.addActionListener(_       -> abrirPerfil());
-        btnSalir.addActionListener(_        -> cerrarSesion());
+        btnJugar.addActionListener(e        -> abrirRuleta());
+        btnHistorial.addActionListener(e    -> abrirHistorial());
+        btnEstadisticas.addActionListener(e -> abrirEstadisticas());
+        btnPerfil.addActionListener(e       -> abrirPerfil());
+        btnSalir.addActionListener(e        -> cerrarSesion());
     }
 
     private void abrirRuleta() {

@@ -72,7 +72,7 @@ public class VentanaRuleta {
     }
 
     private void configurarEventos() {
-        btnGirar.addActionListener(_ -> intentarJugar());
+        btnGirar.addActionListener(e -> intentarJugar());
     }
 
     private void intentarJugar() {

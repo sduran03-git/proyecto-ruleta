@@ -39,7 +39,7 @@ public class VentanaEstadisticas {
     }
 
     private void configurarEventos() {
-        btnCerrar.addActionListener(_ -> frame.dispose());
+        btnCerrar.addActionListener(e -> frame.dispose());
     }
 
     private void cargarEstadisticas() {
