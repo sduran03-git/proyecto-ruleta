@@ -13,7 +13,9 @@ public class Ruleta {
     private final IRepositorioResultados  repositorio;
 
     public Ruleta(int saldoInicial, IRepositorioResultados repositorio) {
-        this.saldo      = saldoInicial;
+        if (saldoInicial < 0)
+            throw new IllegalArgumentException("Saldo inicial inválido");
+        this.saldo       = saldoInicial;
         this.repositorio = repositorio;
     }
 
@@ -34,6 +36,10 @@ public class Ruleta {
     }
 
     public Resultado jugar(ApuestaBase apuesta) {
+        if (apuesta == null)
+            throw new IllegalArgumentException("Apuesta requerida");
+        if (apuesta.getMonto() > saldo)
+            throw new IllegalArgumentException("Saldo insuficiente");
         int     numero  = girar();
         String  color   = colorDe(numero);
         boolean acierto = apuesta.acierta(numero, color);
@@ -61,9 +67,9 @@ public class Ruleta {
         return saldo > 0;
     }
 
-    public int           getSaldo()      { return saldo; }
-    public List<Resultado> getHistorial() { return repositorio.obtenerTodos(); }
-    public int getHistorialSize()         { return repositorio.obtenerTodos().size(); }
+    public int             getSaldo()      { return saldo; }
+    public List<Resultado> getHistorial()  { return repositorio.obtenerTodos(); }
+    public int             getHistorialSize() { return repositorio.obtenerTodos().size(); }
 
     public int getTotalApostado() {
         int total = 0;
